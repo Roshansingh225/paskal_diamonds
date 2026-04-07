@@ -663,7 +663,7 @@ select {
 }
 
 @media (max-width: 800px) {
-  .menu-toggle {
+  .icon-button.menu-toggle {
     display: inline-grid;
   }
 
