@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="footer-brand">
           <Link className="brand" to="/">
             <Gem size={24} />
-            <span>Paskal Diamonds</span>
+            <span>Paskal Diamond</span>
           </Link>
           <p>Fine jewellery for quiet celebrations, heirloom moments, and everyday light.</p>
           <div className="footer-socials">
@@ -48,7 +48,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} Paskal Diamonds. All rights reserved.</span>
+        <span>© {new Date().getFullYear()} Paskal Diamond. All rights reserved.</span>
         <span>Secure orders powered by Supabase.</span>
       </div>
     </footer>

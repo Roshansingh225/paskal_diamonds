@@ -114,7 +114,7 @@ export default function Admin() {
     <section className="page admin-layout">
       <div className="admin-hero">
         <p className="eyebrow">Admin</p>
-        <h1>Manage Paskal Diamonds.</h1>
+        <h1>Manage Paskal Diamond.</h1>
         {message && <p className="status-note">{message}</p>}
       </div>
 

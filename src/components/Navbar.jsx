@@ -26,7 +26,7 @@ export default function Navbar() {
     <header className="site-header">
       <Link className="brand" to="/" onClick={() => setOpen(false)}>
         <Gem size={24} />
-        <span>Paskal Diamonds</span>
+        <span>Paskal Diamond</span>
       </Link>
 
       <button className="icon-button menu-toggle" onClick={() => setOpen((value) => !value)} aria-label="Open menu">

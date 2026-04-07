@@ -26,7 +26,7 @@ export default function CartCheckout() {
   const [status, setStatus] = useState('');
 
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '919999999999';
-  const whatsappText = encodeURIComponent(`Hello Paskal Diamonds, I would like to order: ${items.map((item) => `${item.quantity} x ${item.name}`).join(', ')}. Total: ${formatCurrency(total)}.`);
+  const whatsappText = encodeURIComponent(`Hello Paskal Diamond, I would like to order: ${items.map((item) => `${item.quantity} x ${item.name}`).join(', ')}. Total: ${formatCurrency(total)}.`);
 
   async function createOrder(method) {
     if (!items.length) return null;
@@ -67,7 +67,7 @@ export default function CartCheckout() {
           key: import.meta.env.VITE_RAZORPAY_KEY_ID,
           amount: Number(total) * 100,
           currency: 'INR',
-          name: 'Paskal Diamonds',
+          name: 'Paskal Diamond',
           description: `Order ${order.id}`,
           handler: () => {
             setStatus('Payment captured. Your order is pending fulfilment.');

@@ -22,7 +22,7 @@ export default function ProductDetail() {
   if (error || !product) return <section className="page"><p className="error">{error || 'Product not found.'}</p></section>;
 
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '919999999999';
-  const whatsappText = encodeURIComponent(`Hello Paskal Diamonds, I am interested in ${product.name} (${formatCurrency(product.price)}).`);
+  const whatsappText = encodeURIComponent(`Hello Paskal Diamond, I am interested in ${product.name} (${formatCurrency(product.price)}).`);
 
   return (
     <section className="page detail-layout">

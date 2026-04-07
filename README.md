@@ -1,4 +1,4 @@
-# Paskal Diamonds
+# Paskal Diamond
 
 Full-stack luxury jewellery ecommerce site built with React, Vite, Supabase Auth, Supabase Postgres, Supabase Storage, WhatsApp ordering, and a Razorpay checkout launcher.
 

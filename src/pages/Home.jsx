@@ -8,7 +8,7 @@ export default function Home() {
         <div className="hero-overlay" />
         <div className="hero-content">
           <p className="eyebrow">Fine diamonds. Warm gold. Lasting light.</p>
-          <h1>Paskal Diamonds</h1>
+          <h1>Paskal Diamond</h1>
           <p>Handpicked jewellery for celebrations, heirlooms, and everyday brilliance.</p>
           <div className="hero-actions">
             <Link className="button primary" to="/products">Shop collection <ArrowRight size={18} /></Link>
