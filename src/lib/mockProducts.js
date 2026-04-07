@@ -1,0 +1,38 @@
+export const mockProducts = [
+  {
+    id: 'demo-necklace',
+    name: 'Diamond Necklace',
+    price: 85000,
+    category: 'Necklace',
+    image_url: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1200&q=80',
+    description: 'A luminous diamond necklace set for signature evenings.',
+    stock: 5,
+  },
+  {
+    id: 'demo-ring',
+    name: 'Gold Ring',
+    price: 25000,
+    category: 'Ring',
+    image_url: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=80',
+    description: 'An elegant gold ring with a quiet, polished profile.',
+    stock: 10,
+  },
+  {
+    id: 'demo-bracelet',
+    name: 'Solitaire Tennis Bracelet',
+    price: 125000,
+    category: 'Bracelet',
+    image_url: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=1200&q=80',
+    description: 'A graceful line of light-cut stones finished in warm gold.',
+    stock: 3,
+  },
+  {
+    id: 'demo-earrings',
+    name: 'Pearl Drop Earrings',
+    price: 42000,
+    category: 'Earrings',
+    image_url: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1200&q=80',
+    description: 'Soft pearl drops framed for refined everyday brilliance.',
+    stock: 7,
+  },
+];
