@@ -1,11 +1,12 @@
 import { Check, MessageCircle, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { formatCurrency, getProduct } from '../lib/supabase';
 
 export default function ProductDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,9 +27,13 @@ export default function ProductDetail() {
   const whatsappText = encodeURIComponent(`Hello Paskal Diamond, I am interested in ${product.name} (${formatCurrency(product.price)}).`);
 
   function handleAdd() {
+    if (added) {
+      navigate('/cart');
+      return;
+    }
+
     addToCart(product);
     setAdded(true);
-    window.setTimeout(() => setAdded(false), 1400);
   }
 
   return (
@@ -42,7 +47,7 @@ export default function ProductDetail() {
         <p className="stock-note">{product.stock > 0 ? `${product.stock} available` : 'Available on request'}</p>
         <div className="button-row">
           <button className={added ? 'button primary added-to-cart' : 'button primary'} onClick={handleAdd}>
-            {added ? <><Check size={18} /> Added to cart</> : <><ShoppingBag size={18} /> Add to cart</>}
+            {added ? <><Check size={18} /> Go to cart</> : <><ShoppingBag size={18} /> Add to cart</>}
           </button>
           <a className="button secondary" href={`https://wa.me/${whatsappNumber}?text=${whatsappText}`} target="_blank" rel="noreferrer">
             <MessageCircle size={18} /> WhatsApp order
