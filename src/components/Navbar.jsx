@@ -1,11 +1,13 @@
 import { Gem, Menu, ShoppingBag, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [cartBump, setCartBump] = useState(false);
+  const previousCount = useRef(0);
   const { count } = useCart();
   const { user, isAdmin, signOut } = useAuth();
 
@@ -16,6 +18,14 @@ export default function Navbar() {
   ];
 
   if (isAdmin) links.push(['Admin', '/admin']);
+
+  useEffect(() => {
+    if (count > previousCount.current) {
+      setCartBump(true);
+      window.setTimeout(() => setCartBump(false), 650);
+    }
+    previousCount.current = count;
+  }, [count]);
 
   async function handleSignOut() {
     await signOut();
@@ -39,7 +49,7 @@ export default function Navbar() {
             {label}
           </NavLink>
         ))}
-        <Link className="cart-link" to="/cart" onClick={() => setOpen(false)}>
+        <Link className={cartBump ? 'cart-link cart-bump' : 'cart-link'} to="/cart" onClick={() => setOpen(false)}>
           <ShoppingBag size={18} />
           <span>{count}</span>
         </Link>

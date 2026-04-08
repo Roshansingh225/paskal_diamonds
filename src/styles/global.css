@@ -210,6 +210,12 @@ p {
   gap: 0.35rem;
   color: var(--deep-gold);
   background: var(--white);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cart-bump {
+  animation: cartBump 0.55s ease;
+  box-shadow: 0 10px 22px rgba(168, 120, 44, 0.28);
 }
 
 .icon-button.menu-toggle {
@@ -282,12 +288,24 @@ p {
   border-radius: 8px;
   padding: 0.8rem 1.05rem;
   font-weight: 700;
+  transition: transform 0.18s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button:active,
+.product-card-footer button:active {
+  transform: translateY(1px) scale(0.98);
 }
 
 .primary {
   background: linear-gradient(135deg, var(--gold), var(--deep-gold));
   color: white;
   box-shadow: 0 12px 26px rgba(116, 80, 27, 0.28);
+}
+
+.added-to-cart,
+.product-card-footer button.added {
+  background: linear-gradient(135deg, #2f7a4f, #1f5c3a);
+  color: white;
 }
 
 .secondary {
@@ -442,6 +460,13 @@ select {
 .product-card {
   overflow: hidden;
   animation: rise 0.55s ease both;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.product-card.just-added {
+  border-color: rgba(47, 122, 79, 0.55);
+  box-shadow: 0 18px 50px rgba(47, 122, 79, 0.18);
+  transform: translateY(-3px);
 }
 
 .product-image-wrap img {
@@ -472,11 +497,17 @@ select {
 }
 
 .product-card-footer button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-width: 74px;
   border: 0;
   border-radius: 8px;
   padding: 0.65rem 0.9rem;
   background: var(--brown);
   color: white;
+  transition: transform 0.18s ease, background 0.2s ease;
 }
 
 .detail-copy {
@@ -653,6 +684,18 @@ select {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes cartBump {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
