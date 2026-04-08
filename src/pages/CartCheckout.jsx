@@ -26,7 +26,26 @@ export default function CartCheckout() {
   const [status, setStatus] = useState('');
 
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '919999999999';
+  const upiId = import.meta.env.VITE_UPI_ID;
   const whatsappText = encodeURIComponent(`Hello Paskal Diamond, I would like to order: ${items.map((item) => `${item.quantity} x ${item.name}`).join(', ')}. Total: ${formatCurrency(total)}.`);
+
+  function openUpiPayment(order) {
+    if (!upiId || upiId === 'merchant@upi') {
+      setStatus('Add your merchant UPI ID in VITE_UPI_ID to open UPI payment apps.');
+      return;
+    }
+
+    const upiParams = new URLSearchParams({
+      pa: upiId,
+      pn: 'Paskal Diamond',
+      am: String(Number(total).toFixed(2)),
+      cu: 'INR',
+      tn: `Paskal Diamond order ${order.id}`,
+    });
+
+    window.location.href = `upi://pay?${upiParams.toString()}`;
+    setStatus('Opening your UPI app. Complete the payment there, then return to this page.');
+  }
 
   async function createOrder(method) {
     if (!items.length) return null;
@@ -81,8 +100,13 @@ export default function CartCheckout() {
       }
 
       if (order) {
+        if (method === 'UPI') {
+          openUpiPayment(order);
+          return;
+        }
+
         clearCart();
-        setStatus(method === 'UPI' ? 'Order saved. Complete payment with your preferred UPI app.' : 'Order saved.');
+        setStatus('Order saved.');
       }
     } catch (error) {
       setStatus(error.message);
@@ -142,7 +166,13 @@ export default function CartCheckout() {
         <a className="button secondary full" href={`https://wa.me/${whatsappNumber}?text=${whatsappText}`} target="_blank" rel="noreferrer">
           <MessageCircle size={18} /> WhatsApp order
         </a>
-        {paymentMethod === 'UPI' && <p className="small-note">UPI intent/deep-link details can be added after the merchant VPA is confirmed.</p>}
+        {paymentMethod === 'UPI' && (
+          <p className="small-note">
+            {upiId && upiId !== 'merchant@upi'
+              ? `UPI app will open for ${upiId}.`
+              : 'Add VITE_UPI_ID in environment variables to open UPI apps.'}
+          </p>
+        )}
         {status && <p className="status-note">{status}</p>}
       </aside>
     </section>
