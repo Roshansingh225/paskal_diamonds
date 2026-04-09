@@ -159,6 +159,12 @@ export default function Admin() {
               <div>
                 <h3>{formatCurrency(order.total_price)} · {order.payment_method}</h3>
                 <p>{new Date(order.created_at).toLocaleString()} · {order.order_items?.length || 0} items</p>
+                <p>{order.customer_name || 'Customer'} · {order.customer_phone || 'No phone'}</p>
+                <p>
+                  {[order.address_line1, order.address_line2, order.landmark, order.city, order.state, order.postal_code]
+                    .filter(Boolean)
+                    .join(', ')}
+                </p>
               </div>
               <select value={order.status} onChange={(event) => updateOrderStatus(order.id, event.target.value)}>
                 <option>pending</option>

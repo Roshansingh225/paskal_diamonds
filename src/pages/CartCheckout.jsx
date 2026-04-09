@@ -1,5 +1,5 @@
 import { MessageCircle, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
@@ -21,13 +21,54 @@ function loadRazorpay() {
 
 export default function CartCheckout() {
   const { items, total, updateQuantity, removeFromCart, clearCart } = useCart();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [paymentMethod, setPaymentMethod] = useState('UPI');
   const [status, setStatus] = useState('');
+  const [shipping, setShipping] = useState({
+    customer_name: '',
+    customer_phone: '',
+    address_line1: '',
+    address_line2: '',
+    city: '',
+    state: '',
+    postal_code: '',
+    landmark: '',
+  });
+
+  useEffect(() => {
+    setShipping((current) => ({
+      ...current,
+      customer_name: current.customer_name || profile?.name || user?.user_metadata?.name || '',
+      customer_phone: current.customer_phone || profile?.phone || user?.phone || '',
+    }));
+  }, [profile, user]);
 
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '919999999999';
   const upiId = import.meta.env.VITE_UPI_ID;
   const whatsappText = encodeURIComponent(`Hello Paskal Diamond, I would like to order: ${items.map((item) => `${item.quantity} x ${item.name}`).join(', ')}. Total: ${formatCurrency(total)}.`);
+
+  function updateShipping(field, value) {
+    setShipping((current) => ({ ...current, [field]: value }));
+  }
+
+  function validateShipping() {
+    const requiredFields = [
+      ['customer_name', 'Customer name'],
+      ['customer_phone', 'Phone number'],
+      ['address_line1', 'Address line 1'],
+      ['city', 'City'],
+      ['state', 'State'],
+      ['postal_code', 'PIN code'],
+    ];
+
+    const missing = requiredFields.find(([field]) => !shipping[field]?.trim());
+    if (missing) {
+      setStatus(`${missing[1]} is required for delivery.`);
+      return false;
+    }
+
+    return true;
+  }
 
   function openUpiPayment(order) {
     if (!upiId || upiId === 'merchant@upi') {
@@ -53,10 +94,16 @@ export default function CartCheckout() {
       setStatus('Sign in with Supabase enabled to save this order.');
       return null;
     }
+    if (!validateShipping()) return null;
 
     const { data: order, error } = await supabase
       .from('orders')
-      .insert({ user_id: user.id, total_price: total, payment_method: method })
+      .insert({
+        user_id: user.id,
+        total_price: total,
+        payment_method: method,
+        ...shipping,
+      })
       .select()
       .single();
 
@@ -135,12 +182,15 @@ export default function CartCheckout() {
               <div>
                 <h3>{item.name}</h3>
                 <p>{formatCurrency(item.price)}</p>
-                <input
-                  type="number"
-                  min="1"
-                  value={item.quantity}
-                  onChange={(event) => updateQuantity(item.id, Number(event.target.value))}
-                />
+                <div className="quantity-stepper">
+                  <button type="button" onClick={() => updateQuantity(item.id, item.quantity - 1)} aria-label={`Decrease ${item.name}`}>
+                    -
+                  </button>
+                  <span>{item.quantity}</span>
+                  <button type="button" onClick={() => updateQuantity(item.id, item.quantity + 1)} aria-label={`Increase ${item.name}`}>
+                    +
+                  </button>
+                </div>
               </div>
               <button className="icon-button" onClick={() => removeFromCart(item.id)} aria-label={`Remove ${item.name}`}>
                 <Trash2 />
@@ -153,6 +203,44 @@ export default function CartCheckout() {
       <aside className="checkout-card">
         <p className="eyebrow">Checkout</p>
         <h2>{formatCurrency(total)}</h2>
+        <div className="shipping-form">
+          <label>
+            Full name
+            <input value={shipping.customer_name} onChange={(event) => updateShipping('customer_name', event.target.value)} placeholder="Rohan Singh" />
+          </label>
+          <label>
+            Phone
+            <input value={shipping.customer_phone} onChange={(event) => updateShipping('customer_phone', event.target.value)} placeholder="+91 98765 43210" />
+          </label>
+          <label>
+            Address line 1
+            <input value={shipping.address_line1} onChange={(event) => updateShipping('address_line1', event.target.value)} placeholder="House no, street, area" />
+          </label>
+          <label>
+            Address line 2
+            <input value={shipping.address_line2} onChange={(event) => updateShipping('address_line2', event.target.value)} placeholder="Apartment, floor, optional" />
+          </label>
+          <div className="checkout-grid">
+            <label>
+              City
+              <input value={shipping.city} onChange={(event) => updateShipping('city', event.target.value)} placeholder="Delhi" />
+            </label>
+            <label>
+              State
+              <input value={shipping.state} onChange={(event) => updateShipping('state', event.target.value)} placeholder="Delhi" />
+            </label>
+          </div>
+          <div className="checkout-grid">
+            <label>
+              PIN code
+              <input value={shipping.postal_code} onChange={(event) => updateShipping('postal_code', event.target.value)} placeholder="110001" />
+            </label>
+            <label>
+              Landmark
+              <input value={shipping.landmark} onChange={(event) => updateShipping('landmark', event.target.value)} placeholder="Near metro station" />
+            </label>
+          </div>
+        </div>
         <label>
           Payment method
           <select value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)}>

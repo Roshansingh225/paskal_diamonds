@@ -29,6 +29,15 @@ create table if not exists orders (
   created_at timestamp default now()
 );
 
+alter table orders add column if not exists customer_name text;
+alter table orders add column if not exists customer_phone text;
+alter table orders add column if not exists address_line1 text;
+alter table orders add column if not exists address_line2 text;
+alter table orders add column if not exists city text;
+alter table orders add column if not exists state text;
+alter table orders add column if not exists postal_code text;
+alter table orders add column if not exists landmark text;
+
 create table if not exists order_items (
   id uuid primary key default uuid_generate_v4(),
   order_id uuid references orders(id) on delete cascade,

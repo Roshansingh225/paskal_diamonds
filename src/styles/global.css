@@ -573,11 +573,32 @@ select {
   font-size: 1.2rem;
 }
 
-.cart-item input {
-  max-width: 88px;
+.quantity-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 0.55rem;
+  padding: 0.35rem;
+  background: var(--white);
+}
+
+.quantity-stepper button {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--brown);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.quantity-stepper span {
+  min-width: 24px;
+  text-align: center;
+  color: var(--brown);
+  font-weight: 700;
 }
 
 .checkout-card,
@@ -614,6 +635,18 @@ select {
   gap: 0.45rem;
   color: var(--brown);
   font-weight: 700;
+}
+
+.shipping-form {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
 .form-grid {
@@ -781,6 +814,10 @@ select {
 
   .button {
     width: 100%;
+  }
+
+  .checkout-grid {
+    grid-template-columns: 1fr;
   }
 
   .footer-main {
