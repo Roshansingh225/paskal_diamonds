@@ -45,6 +45,7 @@ export default function CartCheckout() {
 
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '919999999999';
   const upiId = import.meta.env.VITE_UPI_ID;
+  const isUpiConfigured = Boolean(upiId && upiId !== 'merchant@upi');
   const whatsappText = encodeURIComponent(`Hello Paskal Diamond, I would like to order: ${items.map((item) => `${item.quantity} x ${item.name}`).join(', ')}. Total: ${formatCurrency(total)}.`);
 
   function updateShipping(field, value) {
@@ -71,7 +72,7 @@ export default function CartCheckout() {
   }
 
   function openUpiPayment(order) {
-    if (!upiId || upiId === 'merchant@upi') {
+    if (!isUpiConfigured) {
       setStatus('Add your merchant UPI ID in VITE_UPI_ID to open UPI payment apps.');
       return;
     }
@@ -84,7 +85,7 @@ export default function CartCheckout() {
       tn: `Paskal Diamond order ${order.id}`,
     });
 
-    window.location.href = `upi://pay?${upiParams.toString()}`;
+    window.location.assign(`upi://pay?${upiParams.toString()}`);
     setStatus('Opening your UPI app. Complete the payment there, then return to this page.');
   }
 
@@ -123,6 +124,11 @@ export default function CartCheckout() {
 
   async function checkout(method = paymentMethod) {
     try {
+      if (method === 'UPI' && !isUpiConfigured) {
+        setStatus('UPI payment is not configured yet. Add your real VITE_UPI_ID first.');
+        return;
+      }
+
       setStatus('Creating your order...');
       const order = await createOrder(method);
       if (method === 'Razorpay' && order) {
@@ -249,17 +255,24 @@ export default function CartCheckout() {
           </select>
         </label>
         <button className="button primary full" disabled={!items.length} onClick={() => checkout(paymentMethod)}>
-          Place order
+          {paymentMethod === 'UPI' ? 'Pay with UPI' : paymentMethod === 'Razorpay' ? 'Pay with Razorpay' : 'Place order'}
         </button>
-        <a className="button secondary full" href={`https://wa.me/${whatsappNumber}?text=${whatsappText}`} target="_blank" rel="noreferrer">
-          <MessageCircle size={18} /> WhatsApp order
-        </a>
         {paymentMethod === 'UPI' && (
           <p className="small-note">
-            {upiId && upiId !== 'merchant@upi'
+            {isUpiConfigured
               ? `UPI app will open for ${upiId}.`
               : 'Add VITE_UPI_ID in environment variables to open UPI apps.'}
           </p>
+        )}
+        {paymentMethod !== 'UPI' && (
+          <a className="button secondary full" href={`https://wa.me/${whatsappNumber}?text=${whatsappText}`} target="_blank" rel="noreferrer">
+            <MessageCircle size={18} /> WhatsApp order
+          </a>
+        )}
+        {paymentMethod === 'UPI' && (
+          <a className="support-link" href={`https://wa.me/${whatsappNumber}?text=${whatsappText}`} target="_blank" rel="noreferrer">
+            Need help? Chat on WhatsApp
+          </a>
         )}
         {status && <p className="status-note">{status}</p>}
       </aside>

@@ -20,8 +20,7 @@ export default function AuthPromptModal() {
         <h2>Sign in to continue.</h2>
         <p>Your item is in the cart. Log in to save your details and place the order smoothly.</p>
         <div className="button-row">
-          <Link className="button primary" to="/auth" onClick={closeAuthPrompt}>Sign in</Link>
-          <button className="button secondary" onClick={closeAuthPrompt}>Continue shopping</button>
+          <Link className="button primary full" to="/auth" onClick={closeAuthPrompt}>Sign in</Link>
         </div>
       </section>
     </div>

@@ -567,7 +567,8 @@ select {
 .stock-note,
 .small-note,
 .status-note,
-.back-link {
+.back-link,
+.support-link {
   font-size: 0.95rem;
 }
 
@@ -576,6 +577,11 @@ select {
   margin-top: 1.5rem;
   color: var(--deep-gold);
   font-weight: 800;
+}
+
+.support-link {
+  color: var(--deep-gold);
+  font-weight: 700;
 }
 
 .checkout-layout {
