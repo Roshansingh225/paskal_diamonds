@@ -1,12 +1,16 @@
 import { Check } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useAuthPrompt } from '../context/AuthPromptContext';
 import { useCart } from '../context/CartContext';
 import { formatCurrency } from '../lib/supabase';
 
 export default function ProductCard({ product }) {
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { user } = useAuth();
+  const { openAuthPrompt } = useAuthPrompt();
   const [added, setAdded] = useState(false);
 
   function handleAdd() {
@@ -17,6 +21,7 @@ export default function ProductCard({ product }) {
 
     addToCart(product);
     setAdded(true);
+    if (!user) openAuthPrompt();
   }
 
   return (

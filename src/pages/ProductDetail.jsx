@@ -1,6 +1,8 @@
 import { Check, MessageCircle, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useAuthPrompt } from '../context/AuthPromptContext';
 import { useCart } from '../context/CartContext';
 import { formatCurrency, getProduct } from '../lib/supabase';
 
@@ -8,6 +10,8 @@ export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { user } = useAuth();
+  const { openAuthPrompt } = useAuthPrompt();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -34,6 +38,7 @@ export default function ProductDetail() {
 
     addToCart(product);
     setAdded(true);
+    if (!user) openAuthPrompt();
   }
 
   return (
